@@ -1,0 +1,97 @@
+app:
+  id: BND-GATEWAY
+apollo:
+  bootstrap:
+    enabled: true
+    namespaces: application
+    eagerLoad.enabled: true
+
+server:
+  port: ${serverPort}
+
+spring:
+  profiles:
+    active: ${profile}
+  application:
+    name: ${app.id}
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+          lower-case-service-id: true
+      httpclient:
+        connect-timeout: ${gateway.timeout.conn}
+        response-timeout: ${gateway.timeout.resp}
+
+  #Datasource
+  datasource:
+    druid:
+      db-type: mysql
+      username: ${db.username}
+      password: ${db.password}
+      url: ${db.url}
+      connection-properties: ${db.conneProps}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      initialSize: ${db.initialSize}
+      minIdle: ${db.minIdle}
+      maxActive: ${db.maxActive}
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-return: true
+      filter.config.enabled: ${druid.filter.config.enabled}
+      filters: ${druid.filters}
+      web-stat-filter:
+        enabled: ${druid.web-stat-filter.enabled}
+        profile-enable: ${druid.web-stat-filter.profile-enable}
+        url-pattern: ${druid.web-stat-filter.url-pattern}
+        exclusions: ${druid.web-stat-filter.exclusions}
+      stat-view-servlet:
+        enabled: ${druid.stat-view-servlet.enabled}
+        url-pattern: ${druid.stat-view-servlet.url-pattern}
+        allow: ${druid.stat-view-servlet.allow }
+        reset-enable: ${druid.stat-view-servlet.reset-enable}
+        login-username: ${druid.stat-view-servlet.login-username}
+        login-password: ${druid.stat-view-servlet.login-password}
+  jms:
+    pub-sub-domain: true
+  #ActiveMQ
+  activemq:
+    broker-url: ${mq.broker-url}
+    user: ${mq.user}
+    password: ${mq.password}
+    in-memory: ${mq.in-memory}
+    send-timeout: ${mq.send-timeout}
+    pool:
+      enabled: ${mq.pool.enabled}
+      max-connections: ${mq.pool.max-connections}
+  jooq:
+    sql-dialect: MYSQL
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${registryAddr}
+
+info:
+  head: head
+  body: body
+  app:
+    name: @project.name@
+    description: @project.description@
+    version: @project.version@
+    encoding: @project.build.sourceEncoding@
+    java:
+      version: @java.version@
+management:
+  endpoints:
+    web:
+      exposure:
+        #加载所有的端点，默认只加载了info、health
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+    #可以关闭指定的端点
+    shutdown:
+      enabled: false

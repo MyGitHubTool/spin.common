@@ -1,0 +1,56 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.6.RELEASE'
+        springCloudVersion = '2.1.2.RELEASE'
+        junitJupiterVersion = '5.4.2'
+    }
+    repositories {
+        mavenLocal()
+        maven { url = "http://192.168.12.151:8081/repository/mathcat/" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+description '服务网关'
+version '1.0.3-SNAPSHOT'
+def artifactId = 'spin-gateway'
+
+dependencies {
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
+    testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion
+
+    implementation group: 'org.mathcat', name: 'spin-core', version: '2.1.41-SNAPSHOT'
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.24'
+    implementation group: 'io.reactivex', name: 'rxjava-reactive-streams', version: '1.2.1'
+    implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.1.8.RELEASE'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-activemq', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis-reactive', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springBootVersion
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-gateway', version: springCloudVersion
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: springCloudVersion
+    implementation group: 'com.alibaba', name: 'druid-spring-boot-starter', version: '1.1.17'
+    implementation group: 'com.ctrip.framework.apollo', name: 'apollo-client', version: '1.4.1'
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    implementation group: 'com.github.xiaoymin', name: 'swagger-bootstrap-ui', version: '1.9.4'
+    implementation group: 'org.messaginghub', name: 'pooled-jms', version: '1.0.6'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.10.6'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.10.6'
+
+    implementation group: 'org.jooq', name: 'jooq', version: '3.11.11'
+//    implementation group: 'org.jooq', name: 'jooq-meta', version: '3.11.11'
+//    implementation group: 'org.jooq', name: 'jooq-codegen', version: '3.11.11'
+}

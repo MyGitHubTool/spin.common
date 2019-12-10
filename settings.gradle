@@ -1,0 +1,4 @@
+rootProject.name = 'cloud-infrastructure'
+include 'spin-common-spring-boot-starter'
+include 'spin-gateway'
+

@@ -1,0 +1,120 @@
+buildscript {
+    ext {
+        junitJupiterVersion = '5.5.1'
+//        spinVersion = '2.1.35-SNAPSHOT'
+        springVersion = '5.1.8.RELEASE'
+        springBootVersion = '2.1.6.RELEASE'
+        springCloudVersion = '2.1.2.RELEASE'
+        sentinelStarterVersion = '0.9.0.RELEASE'
+        sentinelVersion = '1.6.3'
+        yamlVersion = '1.24'
+        apolloVersion = '1.4.1'
+        swagger2Version = '2.9.2'
+        mybatisPlusVersion = '3.1.0'
+        httpclientVersion = '4.5.9'
+        openFeignVersion = '10.2.3'
+        validationVersion = '2.0.1.Final'
+        servletVersion = '4.0.1'
+        slf4jVersion = '1.7.26'
+        asmVersion = '7.1'
+        httpclientVersion = '4.5.8'
+        httpasyncclientVersion = '4.1.4'
+        commonsNetVersion = '3.6'
+        dom4jVersion = '1.6'
+        poiVersion = '4.1.0'
+        bouncyVersion = '1.61'
+    }
+    repositories {
+        mavenLocal()
+        maven { url = "http://192.168.12.151:8081/repository/mathcat/" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+plugins {
+    id 'java-library'
+}
+
+description '公共通用组件starter'
+version '1.0.52-SNAPSHOT'
+def artifactId = 'spin-common-spring-boot-starter'
+
+compileJava.dependsOn(processResources)
+
+test {
+    useJUnitPlatform()
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.version = "$project.version"
+        pom.artifactId = "$artifactId"
+        pom.groupId = "$project.group"
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://192.168.12.151:8081/repository/maven-snapshots/") {
+                authentication(userName: "dev", password: "8D22185")
+            }
+            pom.version = "$project.version"
+            pom.artifactId = "$artifactId"
+            pom.groupId = "$project.group"
+        }
+    }
+}
+
+dependencies {
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion
+
+    api group: 'org.springframework', name: 'spring-context-support', version: springVersion
+    api group: 'org.springframework', name: 'spring-aspects', version: springVersion
+    api group: 'org.springframework.boot', name: 'spring-boot', version: springBootVersion
+    api group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: springBootVersion
+    api group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springBootVersion
+
+    api group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: springCloudVersion
+    api group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: springCloudVersion
+    api(group: 'org.springframework.cloud', name: 'spring-cloud-starter-alibaba-sentinel', version: sentinelStarterVersion) {
+        exclude(group: 'com.alibaba.csp')
+    }
+    api group: 'com.alibaba.csp', name: 'sentinel-annotation-aspectj', version: sentinelVersion
+    api group: 'com.alibaba.csp', name: 'sentinel-web-servlet', version: sentinelVersion
+    api group: 'com.alibaba.csp', name: 'sentinel-transport-simple-http', version: sentinelVersion
+    api group: 'com.alibaba.csp', name: 'sentinel-cluster-server-default', version: sentinelVersion
+    api group: 'com.alibaba.csp', name: 'sentinel-parameter-flow-control', version: sentinelVersion
+    api group: 'com.alibaba.csp', name: 'sentinel-cluster-client-default', version: sentinelVersion
+    api group: 'com.alibaba.csp', name: 'sentinel-datasource-apollo', version: sentinelVersion
+
+    api group: 'org.yaml', name: 'snakeyaml', version: yamlVersion
+    api group: 'com.ctrip.framework.apollo', name: 'apollo-client', version: apolloVersion
+    api group: 'io.springfox', name: 'springfox-swagger2', version: swagger2Version
+
+    api(group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: mybatisPlusVersion) {
+        exclude(group: 'org.springframework.boot')
+    }
+    api group: 'org.apache.httpcomponents', name: 'httpmime', version: httpclientVersion
+    api group: 'io.github.openfeign', name: 'feign-httpclient', version: openFeignVersion
+
+    api group: 'javax.validation', name: 'validation-api', version: validationVersion
+    api group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
+
+    compileOnly group: 'org.apache.httpcomponents', name: 'httpasyncclient', version: httpasyncclientVersion
+    compileOnly group: 'org.apache.httpcomponents', name: 'httpmime', version: httpclientVersion
+//    compileOnly group: 'commons-net', name: 'commons-net', version: commonsNetVersion
+    compileOnly group: 'dom4j', name: 'dom4j', version: dom4jVersion
+    compileOnly(group: 'org.apache.poi', name: 'poi-excelant', version: poiVersion) {
+        exclude(module: 'ant')
+    }
+    compileOnly group: 'org.apache.poi', name: 'poi-scratchpad', version: poiVersion
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: springBootVersion
+    implementation group: 'org.springframework', name: 'spring-webmvc', version: springVersion
+    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: servletVersion
+}

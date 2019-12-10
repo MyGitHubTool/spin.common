@@ -1,0 +1,109 @@
+allprojects {
+    group 'org.mathcat'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'idea'
+
+    ext {
+        javaVersion = 1.8
+    }
+
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+
+    compileJava {
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+        options.encoding = 'UTF-8'
+    }
+
+    compileTestJava {
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+        options.encoding = 'UTF-8'
+    }
+
+    javadoc {
+        options.encoding = 'UTF-8'
+    }
+
+    repositories {
+        mavenLocal()
+        maven { url = "http://192.168.12.151:8081/repository/mathcat/" }
+        mavenCentral()
+    }
+
+    task sourceJar(type: Jar) {
+        archiveClassifier.set('sources')
+        from sourceSets.main.allJava
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        archiveClassifier.set('javadoc')
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives javadocJar
+        archives sourceJar
+    }
+
+    idea {
+        module {
+            inheritOutputDirs = true
+            downloadSources = true
+            downloadJavadoc = true
+//            outputDir = file("$buildDir/classes/main/")
+//            testOutputDir = file("$buildDir/classes/test/")
+        }
+    }
+}
+
+
+task cleanBuild(group: 'build') doLast {
+    File f = file('build')
+    if (f.exists()) {
+        print("delete build")
+        println(f.deleteDir() ? " success" : " failure")
+    }
+    f = file('out')
+    if (f.exists()) {
+        print("delete out")
+        println(f.deleteDir() ? " success" : " failure")
+    }
+    f = file('target')
+    if (f.exists()) {
+        print("delete target")
+        println(f.deleteDir() ? " success" : " failure")
+    }
+    f = file("bin")
+    if (f.exists()) {
+        print("delete bin")
+        println(f.deleteDir() ? " success" : " failure")
+    }
+    allprojects.each { p ->
+        f = file(p.name + "/build")
+        if (f.exists()) {
+            print("delete " + p.name + "/build")
+            println(f.deleteDir() ? " success" : " failure")
+        }
+        f = file(p.name + "/out")
+        if (f.exists()) {
+            print("delete " + p.name + "/out")
+            println(f.deleteDir() ? " success" : " failure")
+        }
+        f = file(p.name + "/target")
+        if (f.exists()) {
+            print("delete " + p.name + "/target")
+            println(f.deleteDir() ? " success" : " failure")
+        }
+        f = file(p.name + "/bin")
+        if (f.exists()) {
+            print("delete " + p.name + "/bin")
+            println(f.deleteDir() ? " success" : " failure")
+        }
+    }
+}
