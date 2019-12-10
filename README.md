@@ -1,2 +1,2 @@
 # spin.common
-springcloud  封装
+springcloud 公共封装类
